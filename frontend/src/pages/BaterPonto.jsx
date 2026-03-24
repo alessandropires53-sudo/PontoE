@@ -54,7 +54,7 @@ function BaterPonto() {
           formData.append('lng', localizacao.lng);
       }
 
-      const response = await axios.post('http://127.0.0.1:8000/bater-ponto/face', formData, {
+      const response = await axios.post('/api/bater-ponto/face', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       
@@ -78,7 +78,7 @@ function BaterPonto() {
           payload.lng = localizacao.lng;
       }
       
-      const response = await axios.post('http://127.0.0.1:8000/bater-ponto/codigo', payload);
+      const response = await axios.post('/api/bater-ponto/codigo', payload);
       mostrarSucesso(response.data);
       setCodigo('');
     } catch (err) {

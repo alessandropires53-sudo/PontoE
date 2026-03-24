@@ -60,7 +60,7 @@ function Registrar() {
           formData.append('foto', blob, 'foto.jpg');
       }
 
-      const response = await axios.post('http://127.0.0.1:8000/registrar-usuario', formData, {
+      const response = await axios.post('/api/registrar-usuario', formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       

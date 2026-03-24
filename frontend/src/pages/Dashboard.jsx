@@ -26,7 +26,7 @@ function Dashboard() {
     try {
       setLoading(true);
       const token = localStorage.getItem('admin_token');
-      const res = await axios.get('http://127.0.0.1:8000/historico', {
+      const res = await axios.get('/api/historico', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setHistorico(res.data);
@@ -47,7 +47,7 @@ function Dashboard() {
       try {
           const formData = new FormData();
           formData.append('senha', senhaAdmin.trim());
-          const res = await axios.post('http://127.0.0.1:8000/login', formData);
+          const res = await axios.post('/api/login', formData);
           
           localStorage.setItem('admin_token', res.data.access_token);
           setAutenticado(true);

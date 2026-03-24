@@ -241,7 +241,7 @@ def processar_ponto(usuario_id: int, lat: float=None, lng: float=None):
     return {"status": "sucesso", "nome": nome, "tipo": novo_tipo, "horario": agora_str}
 
 
-@app.post("/login")
+@app.post("/api/login")
 async def login(senha: str = Form(...)):
     # Agora verifica o hash da senha administrativa no banco de dados
     conn = sqlite3.connect(DB_PATH)
@@ -257,7 +257,7 @@ async def login(senha: str = Form(...)):
     raise HTTPException(status_code=401, detail="Senha administrativa incorreta")
 
 
-@app.post("/primeiro-acesso")
+@app.post("/api/primeiro-acesso")
 async def primeiro_acesso(identificador: str = Form(...), nova_senha: str = Form(...)):
     """Define a senha para o primeiro acesso usando Email ou CPF."""
     conn = sqlite3.connect(DB_PATH)
@@ -277,7 +277,7 @@ async def primeiro_acesso(identificador: str = Form(...), nova_senha: str = Form
     return {"status": "sucesso", "mensagem": "Senha configurada com sucesso. Agora você pode logar."}
 
 
-@app.post("/login-usuario")
+@app.post("/api/login-usuario")
 async def login_usuario(identificador: str = Form(...), senha: str = Form(...)):
     """Login para funcionários verem seu histórico."""
     conn = sqlite3.connect(DB_PATH)
@@ -293,7 +293,7 @@ async def login_usuario(identificador: str = Form(...), senha: str = Form(...)):
     return {"access_token": token, "token_type": "bearer"}
 
 
-@app.get("/me/historico")
+@app.get("/api/me/historico")
 async def get_me_historico(user: dict = Depends(verificar_token)):
     """Retorna o histórico do próprio usuário logado."""
     usuario_id = int(user["sub"])
@@ -312,7 +312,7 @@ async def get_me_historico(user: dict = Depends(verificar_token)):
     return resultado
 
 
-@app.post("/registrar-usuario")
+@app.post("/api/registrar-usuario")
 async def registrar_usuario(nome: str = Form(...), cpf: str = Form(None), email: str = Form(None), foto: UploadFile = File(None)):
     face_data_json = None
     face_roi = None
@@ -351,7 +351,7 @@ async def registrar_usuario(nome: str = Form(...), cpf: str = Form(None), email:
     return {"status": "sucesso", "codigo_unico": codigo_cru, "nome": nome, "mensagem": "Usuário registrado."}
 
 
-@app.post("/bater-ponto/codigo")
+@app.post("/api/bater-ponto/codigo")
 async def bater_ponto_codigo(payload: dict):
     codigo_str = payload.get("codigo")
     lat = payload.get("lat")
@@ -379,7 +379,7 @@ async def bater_ponto_codigo(payload: dict):
     return processar_ponto(usuario_encontrado_id, lat, lng)
 
 
-@app.post("/bater-ponto/face")
+@app.post("/api/bater-ponto/face")
 async def bater_ponto_face(foto: UploadFile = File(...), lat: float = Form(None), lng: float = Form(None)):
     if not modelo_treinado:
         raise HTTPException(status_code=400, detail="O sistema facial ainda não possui usuários cadastrados.")
@@ -398,7 +398,7 @@ async def bater_ponto_face(foto: UploadFile = File(...), lat: float = Form(None)
     return processar_ponto(label_id, lat, lng)
 
 
-@app.get("/historico")
+@app.get("/api/historico")
 async def get_historico(admin: dict = Depends(verificar_admin)):
     """Retorna o histórico PROTEGIDO POR JWT - Somente admin."""
     conn = sqlite3.connect(DB_PATH)

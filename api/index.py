@@ -38,7 +38,7 @@ FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 # Permite que o React se comunique com o Python - Agora restrito
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[FRONTEND_URL],
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )

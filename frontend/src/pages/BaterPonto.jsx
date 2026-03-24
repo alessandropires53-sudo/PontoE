@@ -54,7 +54,7 @@ function BaterPonto() {
           formData.append('lng', localizacao.lng);
       }
 
-      const response = await axios.post('/api/bater-ponto/face', formData, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/bater-ponto/face`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       
@@ -78,7 +78,7 @@ function BaterPonto() {
           payload.lng = localizacao.lng;
       }
       
-      const response = await axios.post('/api/bater-ponto/codigo', payload);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/bater-ponto/codigo`, payload);
       mostrarSucesso(response.data);
       setCodigo('');
     } catch (err) {

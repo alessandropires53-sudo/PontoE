@@ -19,7 +19,7 @@ const LoginUsuario = () => {
       formData.append('identificador', identificador);
       formData.append('senha', senha);
 
-      const response = await axios.post('/api/login-usuario', formData);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/login-usuario`, formData);
       localStorage.setItem('user_token', response.data.access_token);
       localStorage.setItem('user_name', response.data.nome || 'Funcionário');
       toast.success(`Bem-vindo, ${response.data.nome}!`);
@@ -39,7 +39,7 @@ const LoginUsuario = () => {
       formData.append('identificador', identificador);
       formData.append('nova_senha', senha);
 
-      await axios.post('/api/primeiro-acesso', formData);
+      await axios.post(`${import.meta.env.VITE_API_URL || ''}/api/primeiro-acesso`, formData);
       toast.success("Senha cadastrada com sucesso! Agora você pode entrar.");
       setIsPrimeiroAcesso(false);
       setSenha('');

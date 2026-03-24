@@ -21,7 +21,18 @@ app = FastAPI()
 # Configurações de Segurança do .env
 SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-for-dev-only")
 ALGORITHM = "HS256"
-DB_PATH = os.getenv("DB_PATH", os.path.join(os.path.dirname(os.path.dirname(__file__)), "backend_data", "ponto.db"))
+import shutil
+VERCEL_ENV = os.environ.get("VERCEL") == "1"
+
+if VERCEL_ENV:
+    temp_db_path = "/tmp/ponto.db"
+    original_db = os.path.join(os.path.dirname(os.path.dirname(__file__)), "backend_data", "ponto.db")
+    if not os.path.exists(temp_db_path) and os.path.exists(original_db):
+        shutil.copy2(original_db, temp_db_path)
+    DB_PATH = temp_db_path
+else:
+    DB_PATH = os.getenv("DB_PATH", os.path.join(os.path.dirname(os.path.dirname(__file__)), "backend_data", "ponto.db"))
+
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:5173")
 
 # Permite que o React se comunique com o Python - Agora restrito
